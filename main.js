@@ -1,57 +1,75 @@
 "use strict";
 
-const gameBoard = (() => {
-    const board = [
-        [null, null, null],
-        [null, null, null],
-        [null, null, null],
-    ];
-    const insertMove = (player, x, y) => {
-        if (board[x][y] == null) {
-            board[x][y] = player;
+const gameMaster = (() => {
+    const playerA = createPlayer("Richard", "X");
+    const playerB = createPlayer("Geena", "O");
+
+    let _turnsTotal;
+    let _whoseTurn;
+    
+    const _nextTurn = () => {
+        _whoseTurn = (_whoseTurn == playerA.getSign()) ? playerB.getSign() : playerA.getSign();
+    }
+    const _render = () => {
+        gameBoard.getBoard().forEach(row => {
+            console.log(row);
+        });
+    }
+    const newGame = () => {
+        gameBoard.resetBoard();
+        _turnsTotal = 9;
+        _whoseTurn = playerA.getSign();
+        _render();
+    }
+    const getTurnsTotal = () => {
+        return _turnsTotal;
+    }
+    const activePlayer = () => {
+        return _whoseTurn;
+    }
+    const makeMove = (x,y) => {
+        if (gameBoard.enterMove(_whoseTurn, x, y)) {
+            gameBoard.checkVictory();
+            _nextTurn();
+            _render();
         } else {
-            console.log("Field already set.");
+            console.log("Already taken.");
         }
     }
+    return {
+        getTurnsTotal,
+        newGame,
+        activePlayer,
+        makeMove,
+    }
+})();
+
+const gameBoard = (() => {
+    let _board;
+
+    const resetBoard = () => {
+        _board = [
+            [null, null, null],
+            [null, null, null],
+            [null, null, null],
+        ];
+    }
+    const getBoard = () => {
+        return _board;
+    }
+    const enterMove = (sign, x, y) => {
+        if (_board[x][y] == null) {
+            _board[x][y] = sign;
+            return true;
+        } else return false;
+    }
     const checkVictory = () => {
-        // Check if rows are complete
-        // Row 1
-        board[0][0] === board[0][1] && 
-        board[0][0] === board[0][2] &&
-        board[0][0] != null
-        // Row 2
-        board[1][0] === board[1][1] && 
-        board[1][0] === board[1][2] &&
-        board[1][0] != null
-        // Row 3
-        board[2][0] === board[2][1] && 
-        board[2][0] === board[2][2] &&
-        board[2][0] != null
-        // Check if columns are complete
-        // Column 1
-        board[0][0] === board[1][0] && 
-        board[0][0] === board[2][0] &&
-        board[0][0] != null
-        // Column 2
-        board[0][1] === board[1][1] && 
-        board[0][1] === board[2][1] &&
-        board[0][1] != null
-        // Column 3
-        board[0][2] === board[1][2] && 
-        board[0][2] === board[2][2] &&
-        board[0][2] != null
-        // Check diagonally 1
-        board[0][0] === board[1][1] &&
-        board[0][0] === board[2][2] &&
-        board[0][0] != null
-        // Check diagonally 2
-        board[2][0] === board[1][1] &&
-        board[2][0] === board[0][2] &&
-        board[2][0] != null
+        console.log("Checking");
     }
     return {
-        board,
-        insertMove,
+        getBoard,
+        resetBoard,
+        enterMove,
         checkVictory,
     };
 })();
@@ -60,24 +78,20 @@ function createPlayer(name, sign) {
     const Player = (() => {
         const _name = name;
         const _sign = sign;
-
+        
+        const getSign = () => {
+            return _sign;
+        }
         const getName = () => {
             return _name;
         }
-        const makeMove = (x,y) => {
-            if (x >= 0 && x <= 2 && y >= 0 && y <= 2) {
-                gameBoard.insertMove(getName(), x, y);
-            } else {
-                console.log("Move error.");
-            }
-        }
         return {
+            getSign,
             getName,
-            makeMove,
         }
     })();
     return Player;
 };
 
-const playerA = createPlayer("Richard", "X");
-const playerB = createPlayer("Geena", "O");
+
+gameMaster.newGame();
