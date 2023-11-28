@@ -17,20 +17,20 @@ const gameMaster = (() => {
             console.log(row);
         });
     }
-    const newGame = () => {
+    const _newGame = () => {
         gameBoard.resetBoard();
         _turnsTotal = 9;
         _whoseTurn = playerA.getSign();
         _render();
     }
-    const getTurnsTotal = () => {
+    const _getTurnsTotal = () => {
         return _turnsTotal;
     }
-    const activePlayer = () => {
+    const _activePlayer = () => {
         let aP = (_whoseTurn == playerA.getSign()) ? playerA.getName() : playerB.getName();
         return aP;
     }
-    const makeMove = (x,y) => {
+    const _makeMove = (x,y) => {
         if (gameBoard.enterMove(_whoseTurn, x, y)) {
             if (!gameBoard.checkVictory(_whoseTurn, x, y)) {
                 _turnsTotal--;
@@ -42,16 +42,23 @@ const gameMaster = (() => {
     const setWinner = (player) => {
         _winner = player;
     }
-    const getWinner = () => {
+    const _getWinner = () => {
         return _winner;
     }
+    const playGame = () => {
+        _newGame();
+        while (_getTurnsTotal() > 0 && _getWinner() == "") {
+            let x = prompt("Hey, " + _activePlayer() + "! Enter x:");
+            let y = prompt("Hey, " + _activePlayer() + "! Enter y:");
+            if (+x >= 0 && +x <= 2 && +y >= 0 && +y <= 2) {
+                _makeMove(x,y);
+            } else alert("Error!");
+        }
+        console.log("You won!" + _getWinner());
+    }
     return {
-        getTurnsTotal,
-        newGame,
-        activePlayer,
-        makeMove,
+        playGame,
         setWinner,
-        getWinner,
     }
 })();
 
@@ -199,17 +206,5 @@ function createPlayer(name, sign) {
     return Player;
 };
 
-function playGame() {
-    gameMaster.newGame();
-    while (gameMaster.getTurnsTotal() > 0 && gameMaster.getWinner() == "") {
-        let x = prompt("Hey, " + gameMaster.activePlayer() + "! Enter x:");
-        let y = prompt("Hey, " + gameMaster.activePlayer() + "! Enter y:");
-        if (+x >= 0 && +x <= 2 && +y >= 0 && +y <= 2) {
-            gameMaster.makeMove(x,y);
-        } else alert("Error!");
-    }
-    console.log("You won!" + gameMaster.getWinner());
-}
-
-playGame();
+gameMaster.playGame();
 
