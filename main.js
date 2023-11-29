@@ -1,12 +1,11 @@
 "use strict";
 
 const gameMaster = (() => {
-    const playerA = createPlayer("Richard", "X");
-    const playerB = createPlayer("Geena", "O");
-
     let _turnsTotal;
     let _whoseTurn;
     let _winner = "";
+    let playerA;
+    let playerB;
     
     const _render = () => {
         let b = gameBoard.getBoard();
@@ -16,10 +15,16 @@ const gameMaster = (() => {
         console.log(b[6], b[7], b[8]);
     }
     const _newGame = () => {
+        _createPlayers();
         gameBoard.resetBoard();
         _turnsTotal = 9;
         _whoseTurn = playerA;
+        _winner = "";
         _render();
+    }
+    const _createPlayers = () => {
+        playerA = createPlayer("Richard", "X");
+        playerB = createPlayer("Geena", "O");
     }
     const _makeMove = (x) => {
         if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
@@ -39,18 +44,18 @@ const gameMaster = (() => {
         _newGame();
 
         while (_turnsTotal > 0 && _winner == "") {
-            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter field number (0-8):");
-            if (+x >= 0 && +x <= 8) {
+            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter number (0-8):");
+            if (x >= 0 && x <= 8) {
                 _makeMove(x);
             } else alert("Wrong input!");
         }
-
         if (_winner != "") {
             console.log(_whoseTurn.getName() + ", you won!");
         } else {
             console.log("It's a tie!");
         }
     }
+
     return {
         playGame,
     }
@@ -137,6 +142,7 @@ const gameBoard = (() => {
         }
         return false;
     }
+    
     return {
         getBoard,
         resetBoard,
@@ -164,5 +170,5 @@ function createPlayer(name, sign) {
     return Player;
 };
 
-gameMaster.playGame();
+// gameMaster.playGame(); to start game
 
