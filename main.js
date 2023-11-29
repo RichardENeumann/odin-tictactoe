@@ -8,57 +8,51 @@ const gameMaster = (() => {
     let _whoseTurn;
     let _winner = "";
     
-    const _nextTurn = () => {
-        _whoseTurn = (_whoseTurn == playerA.getSign()) ? playerB.getSign() : playerA.getSign();
-    }
     const _render = () => {
+        let b = gameBoard.getBoard();
         console.clear();
-        gameBoard.getBoard().forEach(row => {
-            console.log(row);
-        });
+        console.log(b[0], b[1], b[2]);
+        console.log(b[3], b[4], b[5]);
+        console.log(b[6], b[7], b[8]);
     }
     const _newGame = () => {
         gameBoard.resetBoard();
         _turnsTotal = 9;
-        _whoseTurn = playerA.getSign();
+        _whoseTurn = playerA;
         _render();
     }
-    const _getTurnsTotal = () => {
-        return _turnsTotal;
-    }
-    const _activePlayer = () => {
-        let aP = (_whoseTurn == playerA.getSign()) ? playerA.getName() : playerB.getName();
-        return aP;
-    }
-    const _makeMove = (x,y) => {
-        if (gameBoard.enterMove(_whoseTurn, x, y)) {
-            if (!gameBoard.checkVictory(_whoseTurn, x, y)) {
+    const _makeMove = (x) => {
+        if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
+            if (!gameBoard.checkVictory(x)) {
                 _turnsTotal--;
                 _nextTurn();
-                _render();
-            } 
+            } else {
+                _winner = _whoseTurn;
+            }
+            _render();
         } else alert("Already taken.");
     }
-    const setWinner = (player) => {
-        _winner = player;
-    }
-    const _getWinner = () => {
-        return _winner;
+    const _nextTurn = () => {
+        _whoseTurn = (_whoseTurn == playerA) ? playerB : playerA;
     }
     const playGame = () => {
         _newGame();
-        while (_getTurnsTotal() > 0 && _getWinner() == "") {
-            let x = prompt("Hey, " + _activePlayer() + "! Enter x:");
-            let y = prompt("Hey, " + _activePlayer() + "! Enter y:");
-            if (+x >= 0 && +x <= 2 && +y >= 0 && +y <= 2) {
-                _makeMove(x,y);
-            } else alert("Error!");
+
+        while (_turnsTotal > 0 && _winner == "") {
+            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter field number (0-8):");
+            if (+x >= 0 && +x <= 8) {
+                _makeMove(x);
+            } else alert("Wrong input!");
         }
-        console.log("You won!" + _getWinner());
+
+        if (_winner != "") {
+            console.log(_whoseTurn.getName() + ", you won!");
+        } else {
+            console.log("It's a tie!");
+        }
     }
     return {
         playGame,
-        setWinner,
     }
 })();
 
@@ -66,118 +60,82 @@ const gameBoard = (() => {
     let _board;
 
     const resetBoard = () => {
-        _board = [
-            ["", "", ""],
-            ["", "", ""],
-            ["", "", ""],
-        ];
+        _board = [".", ".", ".", ".", ".", ".", ".", ".", "."];
     }
     const getBoard = () => {
         return _board;
     }
-    const enterMove = (sign, x, y) => {
-        if (_board[x][y] == "") {
-            _board[x][y] = sign;
+    const enterMove = (sign, x) => {
+        if (_board[x] == ".") {
+            _board[x] = sign;
             return true;
-        } else return false;
-    }
-    const checkVictory = (whoseTurn, x, y) => {
-        let board = getBoard();
-        switch (+x) {
-            case 0:
-                switch (+y) {
-                    case 0:
-                        if ((board[0][0] == board[0][1] && board[0][0] == board[0][2] && board[0][0] == whoseTurn) ||
-                            (board[0][0] == board[1][0] && board[0][0] == board[2][0] && board[0][0] == whoseTurn) ||
-                            (board[0][0] == board[1][1] && board[0][0] == board[2][2] && board[0][0] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }
-                        break;
-                    case 1:
-                        if ((board[0][1] == board[1][1] && board[0][1] == board[2][1] && board[0][1] == whoseTurn) ||
-                            (board[0][1] == board[0][0] && board[0][1] == board[0][2] && board[0][1] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }    
-                        break;
-                    case 2:
-                        if ((board[0][2] == board[0][1] && board[0][2] == board[0][0] && board[0][2] == whoseTurn) ||
-                            (board[0][2] == board[1][2] && board[0][2] == board[2][2] && board[0][2] == whoseTurn) ||
-                            (board[0][2] == board[1][1] && board[0][2] == board[2][0] && board[0][2] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        } 
-                        break; 
-                    default:
-                        return false;
-                        break;     
-                }
-                break;
-            case 1:
-                switch (+y) {
-                    case 0:
-                        if ((board[1][0] == board[1][1] && board[1][0] == board[1][2] && board[1][0] == whoseTurn) ||
-                            (board[1][0] == board[0][0] && board[1][0] == board[2][0] && board[1][0] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }
-                        break;
-                    case 1:
-                        if ((board[1][1] == board[0][1] && board[1][1] == board[2][1] && board[1][1] == whoseTurn) ||
-                            (board[1][1] == board[1][0] && board[1][1] == board[1][2] && board[1][1] == whoseTurn) ||
-                            (board[1][1] == board[0][0] && board[1][1] == board[2][2] && board[1][1] == whoseTurn) ||
-                            (board[1][1] == board[0][2] && board[1][1] == board[2][0] && board[1][1] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }    
-                        break;
-                    case 2:
-                        if ((board[1][2] == board[0][2] && board[1][2] == board[2][2] && board[1][2] == whoseTurn) ||
-                            (board[1][2] == board[1][1] && board[1][2] == board[1][0] && board[1][2] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        } 
-                        break; 
-                    default:
-                        return false;
-                        break;          
-                }
-                break;  
-            case 2:      
-                switch (+y) {
-                    case 0:
-                        if ((board[2][0] == board[2][1] && board[2][0] == board[2][2] && board[2][0] == whoseTurn) ||
-                            (board[2][0] == board[1][0] && board[2][0] == board[0][0] && board[2][0] == whoseTurn) ||
-                            (board[2][0] == board[1][1] && board[2][0] == board[0][2] && board[2][0] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }
-                        break;
-                    case 1:
-                        if ((board[2][1] == board[1][1] && board[2][1] == board[0][1] && board[2][1] == whoseTurn) ||
-                            (board[2][1] == board[2][0] && board[2][1] == board[2][2] && board[2][1] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        }    
-                        break;
-                    case 2:
-                        if ((board[2][2] == board[2][1] && board[2][2] == board[2][0] && board[2][2] == whoseTurn) ||
-                            (board[2][2] == board[1][2] && board[2][2] == board[0][2] && board[2][2] == whoseTurn) ||
-                            (board[2][2] == board[1][1] && board[2][2] == board[0][0] && board[2][2] == whoseTurn)) {
-                            gameMaster.setWinner(whoseTurn);
-                            return true;
-                        } 
-                        break;  
-                    default:
-                        return false;
-                        break;         
-                }
-                break;  
-            default:
-                return false;
-                break;      
+        } else {
+            return false;
         }
+    }
+    const checkVictory = (x) => {
+        switch (+x) {
+            case 0: 
+                if ((_board[0] == _board[1] && _board[0] == _board[2]) ||
+                    (_board[0] == _board[3] && _board[0] == _board[6]) ||
+                    (_board[0] == _board[4] && _board[0] == _board[8])) {
+                        return true;
+                    }
+                break;
+            case 1: 
+                if ((_board[1] == _board[4] && _board[1] == _board[7]) ||
+                    (_board[1] == _board[0] && _board[1] == _board[2])) {
+                        return true;
+                    }
+                break;
+            case 2: 
+                if ((_board[2] == _board[1] && _board[2] == _board[0]) ||
+                    (_board[2] == _board[5] && _board[2] == _board[8])) {
+                        return true;
+                    }
+                break;
+            case 3:
+                if ((_board[3] == _board[4] && _board[3] == _board[5]) ||
+                    (_board[3] == _board[0] && _board[3] == _board[6])) {
+                        return true;
+                    }
+                break;        
+            case 4:
+                if ((_board[4] == _board[3] && _board[4] == _board[5]) ||
+                    (_board[4] == _board[1] && _board[4] == _board[7]) ||
+                    (_board[4] == _board[6] && _board[4] == _board[2]) ||
+                    (_board[4] == _board[0] && _board[4] == _board[8])) {
+                        return true;
+                    }
+                break;
+            case 5:
+                if ((_board[5] == _board[4] && _board[5] == _board[3]) ||
+                    (_board[5] == _board[2] && _board[5] == _board[8])) {
+                        return true;
+                    }
+                break;    
+            case 6:
+                if ((_board[6] == _board[7] && _board[6] == _board[8]) ||
+                    (_board[6] == _board[3] && _board[6] == _board[0]) ||
+                    (_board[6] == _board[4] && _board[6] == _board[2])) {
+                        return true;
+                    }
+                break;        
+            case 7:
+                if ((_board[7] == _board[6] && _board[7] == _board[8]) ||
+                    (_board[7] == _board[4] && _board[7] == _board[1])) {
+                        return true;
+                    }
+                break;        
+            case 8:
+                if ((_board[8] == _board[7] && _board[8] == _board[6]) ||
+                    (_board[8] == _board[5] && _board[8] == _board[2]) ||
+                    (_board[8] == _board[4] && _board[8] == _board[0])) {
+                        return true;
+                    }
+                break;
+        }
+        return false;
     }
     return {
         getBoard,
