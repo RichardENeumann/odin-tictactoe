@@ -60,3 +60,7 @@ main > div:hover {
     background-color: darkseagreen;
 
 }
+/* GAME LOGIC related */
+.activePlayer {
+    color: red;
+}

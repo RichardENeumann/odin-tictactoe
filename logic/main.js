@@ -1,85 +1,45 @@
 "use strict";
 
-const gameMaster = (() => {
-    let _turnsTotal;
-    let _whoseTurn;
-    let _winner;
-    let _playerA;
-    let _playerB;
-    
-    const _render = () => {
-        let b = gameBoard.getBoard();
-        console.clear();
-        console.log(b[0], b[1], b[2]);
-        console.log(b[3], b[4], b[5]);
-        console.log(b[6], b[7], b[8]);
-    }
-    const _newGame = () => {
-        _createPlayers();
-        gameBoard.resetBoard();
-        _turnsTotal = 9;
-        _whoseTurn = _playerA;
-        _winner = "";
-        _render();
-    }
-    const _createPlayers = () => {
-        _playerA = createPlayer("Richard", "X");
-        _playerB = createPlayer("Geena", "O");
-    }
-    const _makeMove = (x) => {
-        if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
-            if (!gameBoard.checkVictory(x)) {
-                _turnsTotal--;
-                _nextTurn();
-            } else {
-                _winner = _whoseTurn;
-            }
-            _render();
-        } else {
-            alert("Already taken.");
+// Player factory
+// IIFE necessary or not? 
+function createPlayer(name, sign) {
+    const Player = (() => {
+        const _name = name;
+        const _sign = sign;
+        
+        const getSign = () => _sign;
+
+        const getName = () => _name;
+
+        return {
+            getSign,
+            getName,
         }
-    }
+    })();
+    return Player;
+};
 
-    const _nextTurn = () => _whoseTurn = (_whoseTurn == _playerA) ? _playerB : _playerA;
-
-    const playGame = () => {
-        _newGame();
-
-        while (_turnsTotal > 0 && _winner == "") {
-            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter number (0-8):");
-            
-            if (x >= 0 && x <= 8) {
-                _makeMove(x); 
-            } else {
-                alert("Wrong input!");
-            }
-        }
-
-        if (_winner != "") {
-            console.log(_whoseTurn.getName() + ", you won!"); 
-        } else {
-            console.log("It's a tie!");
-        }
-    }
-
-    return {
-        playGame,
-    }
-})();
-
+// Game board module
 const gameBoard = (() => {
     let _board;
 
-    const resetBoard = () => { _board = [".", ".", ".", ".", ".", ".", ".", ".", "."]; };
+    // Set initial state
+    const resetBoard = () => { _board = ["", "", "", "", "", "", "", "", ""]; };
 
     const getBoard = () => _board;
     
+    // Save player input in board array if the spot is not already taken
     const enterMove = (sign, x) => {
-        if (_board[x] == ".") {
+        if (_board[x] == "") {
             _board[x] = sign;
             return true;
-        } else return false;
+        } else {
+            return false;
+        }
     }
+
+    // Check if victory condition is given, taking input into account
+    // move to gameMaster???
     const checkVictory = (x) => {
         switch (+x) {
             case 0: 
@@ -137,21 +97,93 @@ const gameBoard = (() => {
     };
 })();
 
-function createPlayer(name, sign) {
-    const Player = (() => {
-        const _name = name;
-        const _sign = sign;
-        
-        const getSign = () => _sign;
+// Game logic module
+const gameMaster = (() => {
+    // Initialize game state variables
+    let _turnsTotal;
+    let _whoseTurn;
+    let _winner;
+    let _playerA;
+    let _playerB;
 
-        const getName = () => _name;
-
-        return {
-            getSign,
-            getName,
+    // Initialize the display state
+    //    
+    // Grab DOM elements for rendering
+    const _DOMplayerA = document.getElementById("playerA");
+    const _DOMplayerB = document.getElementById("playerB");
+    const _DOMbtStartGame = document.getElementById("btStartGame");
+    const _DOMwinner = document.getElementsByTagName("aside")[0];
+    // Grab all 9 div fields for rendering
+    const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
+    
+    const _render = () => {
+        // Mark active player
+        if (_whoseTurn === _playerA) {
+            _DOMplayerA.classList.add("activePlayer");
+            _DOMplayerB.classList.remove("activePlayer");
+        } else {
+            _DOMplayerB.classList.add("activePlayer");
+            _DOMplayerA.classList.remove("activePlayer");
         }
-    })();
-    return Player;
-};
+        // Render board according to state of array
+        let b = gameBoard.getBoard();
+        _DOMboardFields.forEach((field, index) => {
+            field.innerText = b[index];
+        });
+        
+    }
+    
+    const _createPlayers = () => {
+        _playerA = createPlayer("Richard", "X");
+        _playerB = createPlayer("Geena", "O");
+    }
+    const _makeMove = (x) => {
+        if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
+            if (!gameBoard.checkVictory(x)) {
+                _turnsTotal--;
+                _nextTurn();
+            } else {
+                _winner = _whoseTurn;
+            }
+            _render();
+        } else {
+            alert("Already taken.");
+        }
+    }
 
-console.log("To start game, type:    gameMaster.playGame();");
+    const _nextTurn = () => _whoseTurn = (_whoseTurn == _playerA) ? _playerB : _playerA;
+
+    const resetGameState = () => {
+        _createPlayers();
+        gameBoard.resetBoard();
+        _turnsTotal = 9;
+        _whoseTurn = _playerA;
+        _winner = "";
+        _render();
+    }
+
+    const playGame = () => {
+
+        while (_turnsTotal > 0 && _winner == "") {
+            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter number (0-8):");
+            
+            if (x >= 0 && x <= 8) {
+                _makeMove(x); 
+            } else {
+                alert("Wrong input!");
+            }
+        }
+
+        if (_winner != "") {
+            console.log(_whoseTurn.getName() + ", you won!"); 
+        } else {
+            console.log("It's a tie!");
+        }
+    }
+
+    return {
+        resetGameState,
+        playGame,
+    }
+})();
+
