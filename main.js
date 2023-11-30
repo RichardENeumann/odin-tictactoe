@@ -92,8 +92,8 @@ const gameBoard = (() => {
                     (_board[1] == _board[0] && _board[1] == _board[2])) return true;
                 break;
             case 2: 
-            // diagonal check missing!!!
                 if ((_board[2] == _board[1] && _board[2] == _board[0]) ||
+                    (_board[2] == _board[4] && _board[2] == _board[6]) ||
                     (_board[2] == _board[5] && _board[2] == _board[8])) return true;
                 break;
             case 3:
