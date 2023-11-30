@@ -64,3 +64,6 @@ main > div:hover {
 .activePlayer {
     color: red;
 }
+.fieldDisabled:hover {
+    background-color: seagreen;
+}

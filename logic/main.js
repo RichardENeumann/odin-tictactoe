@@ -1,7 +1,6 @@
 "use strict";
 
 // Player factory
-// IIFE necessary or not? 
 function createPlayer(name, sign) {
     const Player = (() => {
         const _name = name;
@@ -90,8 +89,8 @@ const gameBoard = (() => {
     }
 
     return {
-        getBoard,
         resetBoard,
+        getBoard,
         enterMove,
         checkVictory,
     };
@@ -115,8 +114,11 @@ const gameMaster = (() => {
     const _DOMwinner = document.getElementsByTagName("aside")[0];
     // Grab all 9 div fields for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
-    
-   
+    // Add event listeners to all fields 
+    _DOMboardFields.forEach((field, index) => {
+        field.addEventListener("click", function() { _makeMove(index) });
+    });
+       
     const _render = () => {
         // Mark active player
         if (_whoseTurn === _playerA) {
@@ -130,15 +132,22 @@ const gameMaster = (() => {
         let b = gameBoard.getBoard();
         _DOMboardFields.forEach((field, index) => {
             field.innerText = b[index];
+            // Enable/disable hover effect on fields if already taken
+            if (b[index] != "") {
+                field.classList.add("fieldDisabled");
+            } else {
+                field.classList.remove("fieldDisabled");
+            }
         });
     }
     
+    // Take names and signs from input fields later...
     const _createPlayers = () => {
-        // take names and signs from input fields later...
         _playerA = createPlayer("Richard", "X");
         _playerB = createPlayer("Geena", "O");
     }
 
+    // If possible, enter input into array, then check for winning conditions
     const _makeMove = (x) => {
         if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
             if (!gameBoard.checkVictory(x)) {
@@ -154,11 +163,6 @@ const gameMaster = (() => {
     const _nextTurn = () => _whoseTurn = (_whoseTurn == _playerA) ? _playerB : _playerA;
 
     const resetGameState = () => {
-        // Add event listeners to all fields 
-        _DOMboardFields.forEach((field, index) => {
-        field.addEventListener("click", function() { _makeMove(index) });
-        });
-        
         _createPlayers();
         gameBoard.resetBoard();
         _turnsTotal = 9;
@@ -167,27 +171,7 @@ const gameMaster = (() => {
         _render();
     }
 
-    const playGame = () => {
-
-        while (_turnsTotal > 0 && _winner == "") {
-            let x = prompt("Hey, " + _whoseTurn.getName() + "! Enter number (0-8):");
-            
-            if (x >= 0 && x <= 8) {
-                _makeMove(x); 
-            } else {
-                alert("Wrong input!");
-            }
-        }
-
-        if (_winner != "") {
-            console.log(_whoseTurn.getName() + ", you won!"); 
-        } else {
-            console.log("It's a tie!");
-        }
-    }
-
     return {
         resetGameState,
-        playGame,
     }
 })();
