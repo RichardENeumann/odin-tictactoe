@@ -116,6 +116,7 @@ const gameMaster = (() => {
     // Grab all 9 div fields for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
     
+   
     const _render = () => {
         // Mark active player
         if (_whoseTurn === _playerA) {
@@ -130,13 +131,14 @@ const gameMaster = (() => {
         _DOMboardFields.forEach((field, index) => {
             field.innerText = b[index];
         });
-        
     }
     
     const _createPlayers = () => {
+        // take names and signs from input fields later...
         _playerA = createPlayer("Richard", "X");
         _playerB = createPlayer("Geena", "O");
     }
+
     const _makeMove = (x) => {
         if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
             if (!gameBoard.checkVictory(x)) {
@@ -146,14 +148,17 @@ const gameMaster = (() => {
                 _winner = _whoseTurn;
             }
             _render();
-        } else {
-            alert("Already taken.");
         }
     }
 
     const _nextTurn = () => _whoseTurn = (_whoseTurn == _playerA) ? _playerB : _playerA;
 
     const resetGameState = () => {
+        // Add event listeners to all fields 
+        _DOMboardFields.forEach((field, index) => {
+        field.addEventListener("click", function() { _makeMove(index) });
+        });
+        
         _createPlayers();
         gameBoard.resetBoard();
         _turnsTotal = 9;
@@ -186,4 +191,3 @@ const gameMaster = (() => {
         playGame,
     }
 })();
-
