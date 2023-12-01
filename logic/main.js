@@ -110,7 +110,6 @@ const gameMaster = (() => {
     // Grab DOM elements for rendering
     const _DOMplayerA = document.getElementById("playerA");
     const _DOMplayerB = document.getElementById("playerB");
-    const _DOMbtStartGame = document.getElementById("btStartGame");
     const _DOMwinner = document.getElementsByTagName("aside")[0];
     // Grab all 9 div fields for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
@@ -149,25 +148,35 @@ const gameMaster = (() => {
 
     // If possible, enter input into array, then check for winning conditions
     const _makeMove = (x) => {
-        if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
-            if (!gameBoard.checkVictory(x)) {
-                _turnsTotal--;
-                _nextTurn();
-            } else {
-                _winner = _whoseTurn;
+        if (_winner === "") {
+            if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
+                if (!gameBoard.checkVictory(x)) {
+                    _turnsTotal--;
+                    _nextTurn();
+                } else {
+                    _winner = _whoseTurn;
+                    _DOMwinner.innerText = _winner.getName() + " won!";
+                    _DOMwinner.style.visibility = "visible";
+                    _DOMboardFields.forEach((field) => {
+                        field.classList.remove("fieldDisabled");
+                    });
+                }
+                _render();
             }
-            _render();
         }
     }
 
-    const _nextTurn = () => _whoseTurn = (_whoseTurn == _playerA) ? _playerB : _playerA;
+    // Set the next player up to play
+    const _nextTurn = () => _whoseTurn = (_whoseTurn === _playerA) ? _playerB : _playerA;
 
+    // Reset for fresh game state
     const resetGameState = () => {
         _createPlayers();
         gameBoard.resetBoard();
         _turnsTotal = 9;
         _whoseTurn = _playerA;
         _winner = "";
+        _DOMwinner.style.visibility = "hidden";
         _render();
     }
 

@@ -67,3 +67,6 @@ main > div:hover {
 .fieldDisabled:hover {
     background-color: seagreen;
 }
+aside {
+    visibility: hidden;
+}
