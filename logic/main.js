@@ -154,12 +154,10 @@ const gameMaster = (() => {
                     _turnsTotal--;
                     _nextTurn();
                 } else {
+                    // Playing to a tie needs to be implemented still...
                     _winner = _whoseTurn;
                     _DOMwinner.innerText = _winner.getName() + " won!";
                     _DOMwinner.style.visibility = "visible";
-                    _DOMboardFields.forEach((field) => {
-                        field.classList.remove("fieldDisabled");
-                    });
                 }
                 _render();
             }
