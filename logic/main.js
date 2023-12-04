@@ -21,9 +21,11 @@ function createPlayer(name, sign) {
 // Game board module
 const gameBoard = (() => {
     let _board;
+
+    // Threedimensional array presents possible winning combos for each field to reduce number of checks per move
+    // First dimension array index corresponds to makemove(x) 
+    // Third dimension arrays are ordered as to check direct neighbours first to further reduce reduncancy
     const _winningCombinations = [
-        // Threedimensional array presents possible winning combos for field entered with makeMove()
-        // First dimension array index corresponds to makemove(x) for reduced number of checks per move
         [ [0, 1, 2], [0, 3, 6], [0, 4, 8] ],
         [ [1, 0, 2], [1, 4, 7] ],
         [ [2, 1, 0], [2, 5, 8], [2, 4, 6] ],
