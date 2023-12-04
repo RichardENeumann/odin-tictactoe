@@ -21,6 +21,19 @@ function createPlayer(name, sign) {
 // Game board module
 const gameBoard = (() => {
     let _board;
+    const _winningCombinations = [
+        // Threedimensional array presents possible winning combos for field entered with makeMove()
+        // First dimension array index corresponds to makemove(x) for reduced number of checks per move
+        [ [0, 1, 2], [0, 3, 6], [0, 4, 8] ],
+        [ [1, 0, 2], [1, 4, 7] ],
+        [ [2, 1, 0], [2, 5, 8], [2, 4, 6] ],
+        [ [3, 4, 5], [3, 0, 6] ],
+        [ [4, 3, 5], [4, 1, 7], [4, 2, 6,], [4, 0, 8] ],
+        [ [5, 2, 8], [5, 4, 3] ],
+        [ [6, 7, 8], [6, 3, 0], [6, 4, 2] ],
+        [ [7, 6, 8], [7, 4, 1] ],
+        [ [8, 7, 6], [8, 5, 2], [8, 4, 0] ],
+    ];
 
     // Set initial state
     const resetBoard = () => { _board = ["", "", "", "", "", "", "", "", ""]; };
@@ -38,7 +51,6 @@ const gameBoard = (() => {
     }
 
     // Check if victory condition is given, taking input into account
-    // move to gameMaster???
     const checkVictory = (x) => {
         switch (+x) {
             case 0: 
