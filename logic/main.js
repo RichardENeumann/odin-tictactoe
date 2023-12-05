@@ -37,7 +37,7 @@ const gameBoard = (() => {
         [ [8, 7, 6], [8, 5, 2], [8, 4, 0] ],
     ];
 
-    // Check winning conditions surrounding entered field
+    // Check winning conditions around entered field
     const checkVictory = (x) => {
         // Iterate through all listed possible winning combinations and return when successful
         for (let i = 0; i < _winningCombinations[x].length; i++) {
@@ -81,17 +81,15 @@ const gameMaster = (() => {
     let _playerA;
     let _playerB;
 
-    // Initialize the display state
-    //    
-    // Grab DOM elements for rendering
+    // Initialize the display handles
     const _DOMplayerA = document.getElementById("dispA");
     const _DOMinputA = document.getElementById("inA");
     const _DOMplayerB = document.getElementById("dispB");
     const _DOMinputB = document.getElementById("inB");
     const _DOMwinner = document.getElementsByTagName("aside")[0];
-    // Grab all 9 div fields for rendering
+    // Grab all 9 divs for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
-    // Add event listeners to all fields 
+    // Add event listeners 
     _DOMboardFields.forEach((field, index) => {
         field.addEventListener("click", function() { _makeMove(index) });
     });
@@ -109,8 +107,10 @@ const gameMaster = (() => {
         let b = gameBoard.getBoard();
         _DOMboardFields.forEach((field, index) => {
             field.innerText = b[index];
-            // Enable/disable hover effect on fields if already taken
-            if (b[index] != "") {
+            // Enable/disable hover effect on fields
+            if (_gameOver) {
+                field.classList.add("fieldDisabled");
+            } else if (b[index] != "") {
                 field.classList.add("fieldDisabled");
             } else {
                 field.classList.remove("fieldDisabled");
@@ -120,8 +120,8 @@ const gameMaster = (() => {
     
     // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
-        _playerA = createPlayer("Richard", "X");
-        _playerB = createPlayer("Geena", "O");
+        _playerA = createPlayer("Ask", "A");
+        _playerB = createPlayer("Embla", "E");
     }
 
     // Try entering the clicked field into the _board array and check for winning conditions
