@@ -20,8 +20,7 @@ function createPlayer(name, sign) {
 
 // Game board module
 const gameBoard = (() => {
-    // Initialize board with empty fields
-    let _board = ["", "", "", "", "", "", "", "", ""];
+    let _board;
 
     // Threedimensional array presents possible winning combos for each field to reduce number of checks per move
     // First dimension array index corresponds to makemove(x) 
@@ -76,6 +75,7 @@ const gameBoard = (() => {
 const gameMaster = (() => {
     // Initialize game state variables
     let _turnsTotal;
+    let _gameOver;
     let _whoseTurn;
     let _winner;
     let _playerA;
@@ -116,28 +116,41 @@ const gameMaster = (() => {
         });
     }
     
-    // Take names and signs from input fields later...
+    // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
         _playerA = createPlayer("Richard", "X");
         _playerB = createPlayer("Geena", "O");
     }
 
-    // If possible, enter input into array, then check for winning conditions
+    // Try entering the clicked field into the _board array and check for winning conditions
     const _makeMove = (x) => {
-        if (_winner === "") {
+        if (!_gameOver && _gameOver != undefined) {
+            // Is the field you want to click already occupied?
             if (gameBoard.enterMove(_whoseTurn.getSign(), x)) {
+                // If that didn't complete a winning combo, keep on playing
                 if (!gameBoard.checkVictory(x)) {
                     _turnsTotal--;
-                    _nextTurn();
+                    // If all 9 fields have been filled, end in a draw
+                    if (_turnsTotal === 0) {
+                        _gameOver = true;
+                        _DOMwinner.innerText = "It's a draw!";
+                        _DOMwinner.style.visibility = "visible";
+                    // or continue playing
+                    } else {
+                        _nextTurn();
+                    }
+                // If it did complete a winning combo, end the game
                 } else {
-                    // Playing to a tie needs to be implemented still...
+                    _gameOver = true;
                     _winner = _whoseTurn;
+                    // Display winning player
                     _DOMwinner.innerText = _winner.getName() + " won!";
                     _DOMwinner.style.visibility = "visible";
                 }
+                // If you successfully clicked on an empty field, do
                 _render();
             }
-        }
+        } 
     }
 
     // Set the next player up to play
@@ -148,8 +161,9 @@ const gameMaster = (() => {
         _createPlayers();
         gameBoard.resetBoard();
         _turnsTotal = 9;
+        _gameOver = false;
         _whoseTurn = _playerA;
-        _winner = "";
+        _winner = undefined;
         _DOMwinner.style.visibility = "hidden";
         _render();
     }
