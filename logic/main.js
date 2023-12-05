@@ -20,11 +20,12 @@ function createPlayer(name, sign) {
 
 // Game board module
 const gameBoard = (() => {
-    let _board;
+    // Initialize board with empty fields
+    let _board = ["", "", "", "", "", "", "", "", ""];
 
     // Threedimensional array presents possible winning combos for each field to reduce number of checks per move
     // First dimension array index corresponds to makemove(x) 
-    // Third dimension arrays are ordered as to check direct neighbours first to further reduce reduncancy
+    // Third dimension arrays are ordered as to check direct neighbours first to further reduce redundant checking
     const _winningCombinations = [
         [ [0, 1, 2], [0, 3, 6], [0, 4, 8] ],
         [ [1, 0, 2], [1, 4, 7] ],
@@ -37,69 +38,30 @@ const gameBoard = (() => {
         [ [8, 7, 6], [8, 5, 2], [8, 4, 0] ],
     ];
 
-    // Set initial state
+    // Check winning conditions surrounding entered field
+    const checkVictory = (x) => {
+        // Iterate through all listed possible winning combinations and return when successful
+        for (let i = 0; i < _winningCombinations[x].length; i++) {
+            if (_winningCombinations[x][i].every(combo => _board[combo] === _board[x])) {
+                return true;
+            }
+        }    
+        return false;
+    }
+
+    // Reset board to initial state
     const resetBoard = () => { _board = ["", "", "", "", "", "", "", "", ""]; };
 
     const getBoard = () => _board;
     
     // Save player input in board array if the spot is not already taken
     const enterMove = (sign, x) => {
-        if (_board[x] == "") {
+        if (_board[x] === "") {
             _board[x] = sign;
             return true;
         } else {
             return false;
         }
-    }
-
-    // Check if victory condition is given, taking input into account
-    const checkVictory = (x) => {
-        switch (+x) {
-            case 0: 
-                if ((_board[0] == _board[1] && _board[0] == _board[2]) ||
-                    (_board[0] == _board[3] && _board[0] == _board[6]) ||
-                    (_board[0] == _board[4] && _board[0] == _board[8])) return true;
-                break;
-            case 1: 
-                if ((_board[1] == _board[4] && _board[1] == _board[7]) ||
-                    (_board[1] == _board[0] && _board[1] == _board[2])) return true;
-                break;
-            case 2: 
-                if ((_board[2] == _board[1] && _board[2] == _board[0]) ||
-                    (_board[2] == _board[4] && _board[2] == _board[6]) ||
-                    (_board[2] == _board[5] && _board[2] == _board[8])) return true;
-                break;
-            case 3:
-                if ((_board[3] == _board[4] && _board[3] == _board[5]) ||
-                    (_board[3] == _board[0] && _board[3] == _board[6])) return true;
-                break;        
-            case 4:
-                if ((_board[4] == _board[3] && _board[4] == _board[5]) ||
-                    (_board[4] == _board[1] && _board[4] == _board[7]) ||
-                    (_board[4] == _board[6] && _board[4] == _board[2]) ||
-                    (_board[4] == _board[0] && _board[4] == _board[8])) return true;
-                break;
-            case 5:
-                if ((_board[5] == _board[4] && _board[5] == _board[3]) ||
-                    (_board[5] == _board[2] && _board[5] == _board[8])) return true;
-                break;    
-            case 6:
-                if ((_board[6] == _board[7] && _board[6] == _board[8]) ||
-                    (_board[6] == _board[3] && _board[6] == _board[0]) ||
-                    (_board[6] == _board[4] && _board[6] == _board[2])) return true;
-                break;        
-            case 7:
-                if ((_board[7] == _board[6] && _board[7] == _board[8]) ||
-                    (_board[7] == _board[4] && _board[7] == _board[1])) return true;
-
-                break;        
-            case 8:
-                if ((_board[8] == _board[7] && _board[8] == _board[6]) ||
-                    (_board[8] == _board[5] && _board[8] == _board[2]) ||
-                    (_board[8] == _board[4] && _board[8] == _board[0])) return true;
-                break;
-        }
-        return false;
     }
 
     return {
