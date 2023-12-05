@@ -84,8 +84,10 @@ const gameMaster = (() => {
     // Initialize the display state
     //    
     // Grab DOM elements for rendering
-    const _DOMplayerA = document.getElementById("playerA");
-    const _DOMplayerB = document.getElementById("playerB");
+    const _DOMplayerA = document.getElementById("dispA");
+    const _DOMinputA = document.getElementById("inA");
+    const _DOMplayerB = document.getElementById("dispB");
+    const _DOMinputB = document.getElementById("inB");
     const _DOMwinner = document.getElementsByTagName("aside")[0];
     // Grab all 9 div fields for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
@@ -164,6 +166,8 @@ const gameMaster = (() => {
         _gameOver = false;
         _whoseTurn = _playerA;
         _winner = undefined;
+        _DOMinputA.style.visibility = "hidden";
+        _DOMinputB.style.visibility = "hidden";
         _DOMwinner.style.visibility = "hidden";
         _render();
     }

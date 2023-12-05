@@ -6,26 +6,15 @@
     margin: 0;
     padding: 0;
 }
-html {
-    width: 100vw;
-    height: 100vh
-}
 body {
-    height: 100%;
     padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
     gap: 1rem;
     background-color: gray;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 24px;
-}
-header {
-    padding: .5rem;
-    background-color: darkkhaki;
-    font-weight: bolder;
-    text-align: center;
 }
 nav {
     padding: 1rem;
@@ -33,24 +22,29 @@ nav {
     font-size: 2rem;
     font-weight: bolder;
     text-align: center;
+    display: flex;
+    flex-direction: column;
 }
-nav > div {
-    display: inline;
+aside {
+    visibility: hidden;
 }
 main {
     padding: 1rem;
     background-color: darkgray;
     display: grid;
     grid: 1fr 1fr 1fr / 1fr 1fr 1fr;
+    justify-items: center;
+    align-items: center;
     font-family: Futhark;
-    font-size: 4rem;
+    font-size: 5rem;
+    line-height: 5rem;
     font-weight: bolder;
     text-align: center; 
 }
 main > div {
     padding: 1rem;
-    height: 3rem;
-    width: 3rem;
+    height: 4rem;
+    width: 4rem;
     border: 1px solid black;
     background-color: seagreen;
     font-size: 2rem;
@@ -66,7 +60,4 @@ main > div:hover {
 }
 .fieldDisabled:hover {
     background-color: seagreen;
-}
-aside {
-    visibility: hidden;
 }

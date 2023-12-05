@@ -10,25 +10,34 @@
 
 <body>
     <nav>
-        <div id="playerA">Richard</div>
-        <button id="btStartGame" onclick="gameMaster.resetGameState()">Start New Game</button>
-        <div id="playerB">Geena</div>
+        <h1>Odin's Game</h1>
+        <button id="btStartGame" onclick="location.reload()">New Game</button>
+        <div id="playerA">
+            <div id="dispA">Ask</div>
+            <input type="text" id="inA" placeholder="Name for Player A">
+        </div>
+        <div id="playerB">
+            <div id="dispB">Embla</div>
+            <input type="text" id="inB" placeholder="Name for Player B">
+        </div>
+        <button id="btStartGame" onclick="gameMaster.resetGameState()">New Round</button>
     </nav>
 
-    <main>
-            <div id="0" class="fieldDisabled"></div>
-            <div id="1" class="fieldDisabled"></div>
-            <div id="2" class="fieldDisabled"></div>
-            <div id="3" class="fieldDisabled"></div>
-            <div id="4" class="fieldDisabled"></div>
-            <div id="5" class="fieldDisabled"></div>
-            <div id="6" class="fieldDisabled"></div>
-            <div id="7" class="fieldDisabled"></div>
-            <div id="8" class="fieldDisabled"></div>
-    </main>
-
     <aside>
-        Winner:
+        Display
     </aside>
+    
+    <main>
+        <div id="0" class="fieldDisabled"></div>
+        <div id="1" class="fieldDisabled"></div>
+        <div id="2" class="fieldDisabled"></div>
+        <div id="3" class="fieldDisabled"></div>
+        <div id="4" class="fieldDisabled"></div>
+        <div id="5" class="fieldDisabled"></div>
+        <div id="6" class="fieldDisabled"></div>
+        <div id="7" class="fieldDisabled"></div>
+        <div id="8" class="fieldDisabled"></div>
+    </main>
+    
 </body>
 </html>
