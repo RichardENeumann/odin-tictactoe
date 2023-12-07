@@ -25,6 +25,9 @@ nav {
     display: flex;
     flex-direction: column;
 }
+.sign {
+    font-family: "Futhark";
+}
 aside {
     visibility: hidden;
 }
@@ -60,4 +63,7 @@ main > div:hover {
 }
 .fieldDisabled:hover {
     background-color: seagreen;
+}
+.hidden {
+    display: none;
 }

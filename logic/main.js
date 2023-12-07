@@ -95,6 +95,8 @@ const gameMaster = (() => {
     });
        
     const _render = () => {
+        _DOMplayerA.classList.remove("hidden");
+        _DOMplayerB.classList.remove("hidden");
         // Mark active player
         if (_whoseTurn === _playerA) {
             _DOMplayerA.classList.add("activePlayer");
@@ -120,8 +122,22 @@ const gameMaster = (() => {
     
     // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
-        _playerA = createPlayer("Ask", "A");
-        _playerB = createPlayer("Embla", "E");
+        let nameA = document.getElementById("inA");
+        let nameB = document.getElementById("inB");
+        // Create Player A
+        if (nameA.value === "") {
+            _playerA = createPlayer("Ask", "A");
+        } else {
+            _playerA = createPlayer(nameA.value, "A");
+        }
+        _DOMplayerA.textContent = _playerA.getName();
+        // Player B
+        if (nameB.value === "") {
+            _playerB = createPlayer("Embla", "E");
+        } else {
+            _playerB = createPlayer(nameB.value, "E");
+        }
+        _DOMplayerB.textContent = _playerB.getName();
     }
 
     // Try entering the clicked field into the _board array and check for winning conditions
@@ -137,7 +153,7 @@ const gameMaster = (() => {
                         _gameOver = true;
                         _DOMwinner.innerText = "It's a draw!";
                         _DOMwinner.style.visibility = "visible";
-                    // or continue playing
+                    // Or continue playing
                     } else {
                         _nextTurn();
                     }
