@@ -122,20 +122,17 @@ const gameMaster = (() => {
     
     // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
-        let nameA = document.getElementById("inA");
-        let nameB = document.getElementById("inB");
-        // Create Player A
-        if (nameA.value === "") {
+        if (_DOMinputA.value === "") {
             _playerA = createPlayer("Ask", "A");
         } else {
-            _playerA = createPlayer(nameA.value, "A");
+            _playerA = createPlayer(_DOMinputA.value, "A");
         }
         _DOMplayerA.textContent = _playerA.getName();
-        // Player B
-        if (nameB.value === "") {
+
+        if (_DOMinputB.value === "") {
             _playerB = createPlayer("Embla", "E");
         } else {
-            _playerB = createPlayer(nameB.value, "E");
+            _playerB = createPlayer(_DOMinputB.value, "E");
         }
         _DOMplayerB.textContent = _playerB.getName();
     }
@@ -182,8 +179,8 @@ const gameMaster = (() => {
         _gameOver = false;
         _whoseTurn = _playerA;
         _winner = undefined;
-        _DOMinputA.style.visibility = "hidden";
-        _DOMinputB.style.visibility = "hidden";
+        _DOMinputA.style.display = "none";
+        _DOMinputB.style.display = "none";
         _DOMwinner.style.visibility = "hidden";
         _render();
     }
