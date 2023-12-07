@@ -123,16 +123,16 @@ const gameMaster = (() => {
     // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
         if (_DOMinputA.value === "") {
-            _playerA = createPlayer("Ask", "A");
+            _playerA = createPlayer("Ask", "X");
         } else {
-            _playerA = createPlayer(_DOMinputA.value, "A");
+            _playerA = createPlayer(_DOMinputA.value, "X");
         }
         _DOMplayerA.textContent = _playerA.getName();
 
         if (_DOMinputB.value === "") {
-            _playerB = createPlayer("Embla", "E");
+            _playerB = createPlayer("Embla", "O");
         } else {
-            _playerB = createPlayer(_DOMinputB.value, "E");
+            _playerB = createPlayer(_DOMinputB.value, "O");
         }
         _DOMplayerB.textContent = _playerB.getName();
     }
