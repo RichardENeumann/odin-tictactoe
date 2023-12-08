@@ -34,23 +34,21 @@ nav {
     border: 2px solid black;
     background-image: url("./../images/tara-meinczinger-G_yCplAsnB4-unsplash-cropped.jpg");
     background-size: cover;
+    background-color: darkgray;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: .5rem;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-weight: bolder;
 }
-.sign {
-    font-family: "Futhark";
-}
 button {
-    width: 15ch;
     border: 1px solid black;
-    padding: .2rem;
+    padding: .5rem;
     background-color: seagreen;
     color: white;
     font-size: 1rem;
+    font-family: "Norse Bold";
 }
 aside {
     visibility: hidden;
@@ -65,26 +63,23 @@ main {
     background-color: darkgray;
     display: grid;
     grid: 1fr 1fr 1fr / 1fr 1fr 1fr;
-    gap: .1rem;
+    gap: .2rem;
     justify-items: center;
     align-items: center;
-    font-family: Futhark;
-    font-size: 5rem;
-    line-height: 5rem;
-    font-weight: bolder;
-    text-align: center; 
 }
 main > div {
     height: 5rem;
     width: 5rem;
     border: 1px solid black;
     background-color: seagreen;
+    font-family: Futhark;
     font-size: 2rem;
     font-weight: bolder;
+    line-height: 5rem;
+    text-align: center; 
 }
 main > div:hover {
     background-color: darkseagreen;
-
 }
 /* GAME LOGIC related */
 .activePlayer {
@@ -97,8 +92,7 @@ main > div:hover {
     display: none;
 }
 #playerA, #playerB {
-    margin: 1rem;
     display: grid;
-    grid: 1fr / 4fr 1fr;
+    grid-template-columns: 4fr 1fr;
     gap: 1rem;
 }

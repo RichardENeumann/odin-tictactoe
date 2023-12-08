@@ -172,6 +172,7 @@ const gameMaster = (() => {
         _gameOver = false;
         _whoseTurn = _playerA;
         _winner = undefined;
+        _DOMwinner.style.visibility = "hidden";
         _render();
     }
 
