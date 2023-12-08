@@ -95,8 +95,6 @@ const gameMaster = (() => {
     });
        
     const _render = () => {
-        _DOMplayerA.classList.remove("hidden");
-        _DOMplayerB.classList.remove("hidden");
         // Mark active player
         if (_whoseTurn === _playerA) {
             _DOMsignA.classList.add("activePlayer");
@@ -124,7 +122,7 @@ const gameMaster = (() => {
         });
     }
     
-    // Grab user input, verify and create player objects accordingly
+    // Create player objects
     const _createPlayers = () => {
         _playerA = createPlayer("Ask", "G");
         _playerB = createPlayer("Embla", "Q");
@@ -171,7 +169,7 @@ const gameMaster = (() => {
         _turnsTotal = 9;
         _gameOver = false;
         _whoseTurn = _playerA;
-        _winner = undefined;
+        _winner = null;
         _DOMwinner.style.visibility = "hidden";
         _render();
     }
