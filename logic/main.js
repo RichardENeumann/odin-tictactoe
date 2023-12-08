@@ -83,10 +83,8 @@ const gameMaster = (() => {
 
     // Initialize the display handles
     const _DOMplayerA = document.getElementById("dispA");
-    const _DOMinputA = document.getElementById("inA");
     const _DOMsignA = document.getElementById("signA");
     const _DOMplayerB = document.getElementById("dispB");
-    const _DOMinputB = document.getElementById("inB");
     const _DOMsignB = document.getElementById("signB");
     const _DOMwinner = document.getElementsByTagName("aside")[0];
     // Grab all 9 divs for rendering
@@ -128,19 +126,8 @@ const gameMaster = (() => {
     
     // Grab user input, verify and create player objects accordingly
     const _createPlayers = () => {
-        if (_DOMinputA.value === "") {
-            _playerA = createPlayer("Ask", "X");
-        } else {
-            _playerA = createPlayer(_DOMinputA.value, "X");
-        }
-        _DOMplayerA.textContent = _playerA.getName();
-
-        if (_DOMinputB.value === "") {
-            _playerB = createPlayer("Embla", "O");
-        } else {
-            _playerB = createPlayer(_DOMinputB.value, "O");
-        }
-        _DOMplayerB.textContent = _playerB.getName();
+        _playerA = createPlayer("Ask", "G");
+        _playerB = createPlayer("Embla", "Q");
     }
 
     // Try entering the clicked field into the _board array and check for winning conditions
@@ -185,11 +172,6 @@ const gameMaster = (() => {
         _gameOver = false;
         _whoseTurn = _playerA;
         _winner = undefined;
-        _DOMsignA.classList.remove("hidden");
-        _DOMsignB.classList.remove("hidden");
-        _DOMinputA.style.display = "none";
-        _DOMinputB.style.display = "none";
-        _DOMwinner.style.visibility = "hidden";
         _render();
     }
 
