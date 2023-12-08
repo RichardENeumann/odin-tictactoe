@@ -84,8 +84,10 @@ const gameMaster = (() => {
     // Initialize the display handles
     const _DOMplayerA = document.getElementById("dispA");
     const _DOMinputA = document.getElementById("inA");
+    const _DOMsignA = document.getElementById("signA");
     const _DOMplayerB = document.getElementById("dispB");
     const _DOMinputB = document.getElementById("inB");
+    const _DOMsignB = document.getElementById("signB");
     const _DOMwinner = document.getElementsByTagName("aside")[0];
     // Grab all 9 divs for rendering
     const _DOMboardFields = Array.from(document.getElementsByTagName("main")[0].children);
@@ -99,11 +101,15 @@ const gameMaster = (() => {
         _DOMplayerB.classList.remove("hidden");
         // Mark active player
         if (_whoseTurn === _playerA) {
+            _DOMsignA.classList.add("activePlayer");
             _DOMplayerA.classList.add("activePlayer");
             _DOMplayerB.classList.remove("activePlayer");
+            _DOMsignB.classList.remove("activePlayer");
         } else {
             _DOMplayerB.classList.add("activePlayer");
+            _DOMsignB.classList.add("activePlayer");
             _DOMplayerA.classList.remove("activePlayer");
+            _DOMsignA.classList.remove("activePlayer");
         }
         // Render board according to state of array
         let b = gameBoard.getBoard();
@@ -179,6 +185,8 @@ const gameMaster = (() => {
         _gameOver = false;
         _whoseTurn = _playerA;
         _winner = undefined;
+        _DOMsignA.classList.remove("hidden");
+        _DOMsignB.classList.remove("hidden");
         _DOMinputA.style.display = "none";
         _DOMinputB.style.display = "none";
         _DOMwinner.style.visibility = "hidden";

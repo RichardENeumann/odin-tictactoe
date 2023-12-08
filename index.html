@@ -11,16 +11,17 @@
 <body>
     <nav>
         <h1>Odin's Game</h1>
+        <hr>
         <button id="btStartGame" onclick="location.reload()">New Game</button>
         <div id="playerA">
             <input type="text" id="inA" placeholder="Name for Player A">
             <span class="hidden" id="dispA">Ask</span>
-            <span class="sign" id="signA">X</span>
+            <span class="hidden sign" id="signA">X</span>
         </div>
         <div id="playerB">
             <input type="text" id="inB" placeholder="Name for Player B">
             <span  class="hidden" id="dispB">Embla</span>
-            <span class="sign" id="signB">O</span>
+            <span class="hidden sign" id="signB">O</span>
         </div>
         <button id="btStartGame" onclick="gameMaster.resetGameState()">New Round</button>
     </nav>
